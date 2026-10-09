@@ -2,7 +2,11 @@
   "verified_on_utc": "2026-10-09",
   "python": "3.12",
   "data_origin": "synthetic scenarios only",
-  "pytest": {"passed": 22, "failed": 0, "skipped": 0},
+  "pytest": {
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0
+  },
   "ruff_check": "passed",
   "ruff_format_check": "passed",
   "database_used_for_behavior_checks": "SQLite",
@@ -23,7 +27,6 @@
     "Redis broker delivery and a running worker/Beat stack",
     "Docker build and Compose startup",
     "live OpenAI provider call",
-    "real POS integration or restaurant records",
-    "historical MVP implementation and dates"
+    "real POS integration or restaurant records"
   ]
 }
