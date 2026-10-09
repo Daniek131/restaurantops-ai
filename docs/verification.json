@@ -1,0 +1,29 @@
+{
+  "verified_on_utc": "2026-10-09",
+  "python": "3.12",
+  "data_origin": "synthetic scenarios only",
+  "pytest": {"passed": 22, "failed": 0, "skipped": 0},
+  "ruff_check": "passed",
+  "ruff_format_check": "passed",
+  "database_used_for_behavior_checks": "SQLite",
+  "synthetic_demo": {
+    "sale_events": 28,
+    "ingredients": 2,
+    "revenue": "3696.00",
+    "cogs": "400.40",
+    "gross_profit": "3295.60",
+    "execution": "in-process, isolated memory database"
+  },
+  "postgresql_schema_ddl_compiles": true,
+  "compose_yaml_parses": true,
+  "celery_task_bodies": "tested directly and through eager execution",
+  "assistant": "mocked provider responses only",
+  "not_verified": [
+    "live PostgreSQL behavior or concurrency",
+    "Redis broker delivery and a running worker/Beat stack",
+    "Docker build and Compose startup",
+    "live OpenAI provider call",
+    "real POS integration or restaurant records",
+    "historical MVP implementation and dates"
+  ]
+}

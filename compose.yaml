@@ -1,0 +1,48 @@
+x-backend: &backend
+  build: .
+  environment: &settings
+    DATABASE_URL: postgresql+psycopg://restaurantops:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@db/restaurantops
+    REDIS_URL: redis://redis:6379/0
+    API_TOKEN: ${API_TOKEN:?Set API_TOKEN}
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: restaurantops
+      POSTGRES_USER: restaurantops
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U restaurantops -d restaurantops"]
+      interval: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+  api:
+    <<: *backend
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      <<: *settings
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+  worker:
+    <<: *backend
+    command: ["sh", "-c", "python -m app.db && celery -A app.tasks:celery_app worker --loglevel=info --concurrency=1"]
+  beat:
+    <<: *backend
+    command: ["celery", "-A", "app.tasks:celery_app", "beat", "--loglevel=info", "--schedule=/tmp/celerybeat-schedule"]
+
+volumes:
+  database:
