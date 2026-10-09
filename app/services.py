@@ -1,4 +1,4 @@
-"""Inventory writes. Call these inside one session.begin() transaction."""
+"""Record inventory movements within the caller's transaction."""
 
 import hashlib
 import json
@@ -66,7 +66,7 @@ def record_sale(session, payload: SaleInput) -> dict:
         external_id=payload.external_id, payload_hash=fingerprint, occurred_at=payload.occurred_at
     )
     session.add(sale)
-    # The unique external_id is acquired before any stock changes.
+    # I reserve the sale ID before changing stock so retries cannot deplete it twice.
     session.flush()
     for ingredient_id in sorted(usage):
         used = usage[ingredient_id]

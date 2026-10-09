@@ -1,4 +1,4 @@
-"""The model can request three reports. It cannot execute SQL or mutate stock."""
+"""Answer operations questions through a fixed set of read-only reports."""
 
 import json
 import os

@@ -1,4 +1,4 @@
-"""SQL aggregates for costs; Pandas/NumPy for simple demand baselines."""
+"""Cost reports and demand estimates from sales and inventory history."""
 
 from datetime import timedelta
 from decimal import Decimal
@@ -85,7 +85,7 @@ def forecast(session, horizon=7, window=14, now=None):
     for item, usage in daily_usage(session, days=window, now=now):
         average = float(usage.mean())
         demand = Decimal(str(average * horizon)).quantize(Decimal("0.001"))
-        # Hold at least the configured target or horizon demand, whichever is larger.
+        # I use the larger of target stock and forecast demand when calculating a reorder.
         reorder = max(Decimal("0"), max(item.target_level, demand) - item.on_hand)
         result.append(
             {
@@ -105,7 +105,7 @@ def forecast(session, horizon=7, window=14, now=None):
 
 
 def evaluate_forecast(session, now=None):
-    """Walk forward: predict each of the last 7 days using only preceding days."""
+    """Evaluate the last seven days using only earlier usage data."""
     results = []
     for item, usage in daily_usage(session, days=28, now=now):
         observed = usage.to_numpy()

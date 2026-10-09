@@ -1,4 +1,4 @@
-"""Explicitly synthetic scenarios; refuses to seed a nonempty inventory."""
+"""Seed synthetic sales and ingredients in an empty database."""
 
 import json
 from datetime import timedelta

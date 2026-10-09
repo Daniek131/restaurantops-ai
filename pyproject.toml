@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "restaurantops-ai"
 version = "0.1.0"
-description = "A student backend for recipe-based inventory and restaurant analytics"
+description = "Recipe-based inventory, cost analytics, and restaurant demand planning"
 requires-python = ">=3.11"
 dependencies = [
   "fastapi==0.143.0", "uvicorn==0.54.0", "SQLAlchemy==2.1.4",

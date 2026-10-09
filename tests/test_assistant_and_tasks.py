@@ -10,7 +10,7 @@ from app.tasks import celery_app, check_inventory, run_daily_report, run_invento
 
 
 class FakeResponses:
-    """A fake model response, never represented as a live provider test."""
+    """Return a report tool call followed by a fixed answer for the adapter tests."""
 
     def __init__(self):
         self.calls = []
@@ -62,7 +62,7 @@ def test_inventory_check_is_saved_once_per_hour(client, menu):
 
 
 def test_celery_task_body_eagerly_without_a_broker(client, menu, monkeypatch):
-    # This checks task execution, not Redis transport or worker deployment.
+    # Run eagerly to test the task body without starting Redis or a worker.
     monkeypatch.setattr(
         "app.tasks.make_database",
         lambda: (

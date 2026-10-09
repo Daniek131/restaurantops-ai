@@ -76,7 +76,7 @@ def run_daily_report(factory, now=None):
             "forecast": forecast(session, now=cutoff),
             "anomalies": anomalies(session, now=cutoff),
         }
-        # Keep monetary decimals exact in stored JSON.
+        # I store decimals as strings so JSON does not round monetary amounts.
         content = json.loads(json.dumps(report, default=str))
         session.add(DailyReport(day=day, content=content))
     return {"day": day.isoformat(), "duplicate": False}
